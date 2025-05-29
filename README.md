@@ -35,6 +35,7 @@ Phishing-URL-Detection/
 │ ├── feature.cpython-39.pyc
 │ ├── feature.cpython-310.pyc
 ├── .DS_Store # macOS system file
+├── Detecting Phishing URL's # Presenation about the project
 └── README.md # Project documentation (this file)
 ```
 
@@ -42,10 +43,10 @@ Phishing-URL-Detection/
 
 ## Web Application Workflow
 
-1️⃣ **User inputs a URL** in the web interface  
-2️⃣ Flask backend extracts features using `feature.py`  
-3️⃣ The model (`model.pkl`) predicts if the URL is phishing or safe  
-4️⃣ The result and confidence score are displayed on the web page  
+1️. **User inputs a URL** in the web interface  
+2️. Flask backend extracts features using `feature.py`  
+3️. The model (`model.pkl`) predicts if the URL is phishing or safe  
+4️. The result and confidence score are displayed on the web page  
 
 ---
 
@@ -66,6 +67,29 @@ Phishing-URL-Detection/
 | ...                 | **Total 30+ features implemented** in `feature.py`            |
 
 ---
+
+## Code Details
+
+### `app.py` — Flask Application
+
+- **Routes:**
+  - `/` — Home page, accepts GET/POST requests.
+- **Logic:**
+  - Receives a URL from user input
+  - Calls `FeatureExtraction` class from `feature.py` to get a 30-feature vector
+  - Uses pre-trained Gradient Boosting model (`model.pkl`) to predict:
+    - `-1` → Phishing
+    - `1` → Safe
+  - Renders prediction in `index.html` template
+
+Example code flow:
+
+```python
+url = request.form["url"]
+obj = FeatureExtraction(url)
+x = np.array(obj.getFeaturesList()).reshape(1,30)
+y_pred = gbc.predict(x)[0]
+```
 
 ## Model & Evaluation
 
